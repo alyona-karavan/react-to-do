@@ -1,23 +1,17 @@
-<html lang="en" data-framework="es6">
-  <head>
-    <meta charset="utf-8" />
-    <title>Vanilla ES6 • TodoMVC</title>
-    <link rel="stylesheet" href="/src/index.css" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <!-- <section class="todoapp">
-      <header class="header">
-        <h1>todos</h1>
-        <input
-          class="new-todo"
-          placeholder="What needs to be done?"
-          autofocus
-        />
-      </header>
-      <section class="main">
-        <ul class="todo-list">
-          <li class="completed">
+import Task from "../Task/Task";
+
+import "./TaskList.css";
+
+export default function TaskList () {
+    return (
+        <ul className="todo-list">
+            <Task className = ''/>
+        </ul>                                     
+    )
+}
+
+/* 3 состояния компонента таск
+    <li class="completed">
             <div class="view">
               <input class="toggle" type="checkbox" />
               <label>
@@ -50,25 +44,4 @@
               <button class="icon icon-edit"></button>
               <button class="icon icon-destroy"></button>
             </div>
-          </li>
-        </ul>
-        <footer class="footer">
-          <span class="todo-count">1 items left</span>
-          <ul class="filters">
-            <li>
-              <button class="selected">All</button>
-            </li>
-            <li>
-              <button>Active</button>
-            </li>
-            <li>
-              <button>Completed</button>
-            </li>
-          </ul>
-          <button class="clear-completed">Clear completed</button>
-        </footer>
-      </section>
-    </section> -->
-    <!-- <script type="module" src="/src/index.jsx"></script> -->
-  </body>
-</html>
+          </li> */
