@@ -2,51 +2,41 @@ import NewTaskForm from "./components/NewTaskForm";
 import TaskList from "./components/TaskList";
 import Footer from "./components/Footer";
 
-export default function App() {
+import { Component } from "react";
 
-    const data = [
-        { className: 'editing', created: new Date(), description: 'Editing task'},
-        { className: 'completed', created: new Date(), description: 'Completed task'},
-        {created: new Date(), description: 'Active task'},
-    ];
+export default class App extends Component {
 
-    return (
-        <section className="todoapp">
-            <NewTaskForm />
-            <section className="main">
-                <TaskList data = {data}/>
-                <Footer />
+    state = {
+        data : [
+            { className: 'editing', created: new Date(), description: 'Editing task', edit: true, key: 1},
+            { className: 'completed', created: new Date(), description: 'Completed task',  edit: false, key: 2},
+            { created: new Date(), description: 'Active task', edit: false, key: 3},
+        ]
+    };
+
+    deleteItem = (key) => {
+        this.setState ( ({data}) => {
+            const idx = data.findIndex((el) => el.key === key);
+
+            const before = data.slice(0, idx);
+            const after = data.slice(idx + 1);
+            const newArray = [...before, ...after];
+
+            return {
+                data: newArray
+            }
+        })
+    }
+    
+    render () {
+        return (
+            <section className="todoapp">
+                <NewTaskForm />
+                <section className="main">
+                    <TaskList data = {this.state.data} onDelete = {this.deleteItem}/>
+                    <Footer />
+                </section>
             </section>
-        </section>
-    )
+        )
+    }
 }
-
-
-
-/* 
-<header class="header">                                          => NewTaskForm
-    <h1>todos</h1>
-    <input
-          class="new-todo"
-          placeholder="What needs to be done?"
-          autofocus
-        />
-</header>
-
-
-<section class="main">
-
-    <ul class="todo-list">                                        => TaskList
-        <li class="completed">                                    => Task
-        <li class="editing">
-        <li>
-
-    <footer class="footer">                                      => Footer
-        <span class="todo-count">1 items left</span>
-        <ul class="filters">                                    => TasksFilters
-            <li><button class="selected">All</button></li>
-            <li><button>Active</button></li>
-            <li><button>Completed</button></li>
-        <button class="clear-completed">Clear completed</button>
-
-</section> */

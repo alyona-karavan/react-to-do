@@ -2,11 +2,11 @@ import Task from "../Task";
 
 import "./TaskList.css";
 
-export default function TaskList ({data}) {
+export default function TaskList ({data, onDelete}) {
     const elements = data.map((item) => {
 
       return(
-      <Task {...item}/>)
+      <Task {...item} onDelete = {() => { onDelete(item.key)}}/>)
     })
 
     return (
