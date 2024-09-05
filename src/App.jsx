@@ -1,13 +1,20 @@
-import NewTaskForm from "./components/NewTaskForm/NewTaskForm";
-import TaskList from "./components/TaskList/TaskList";
-import Footer from "./components/Footer/Footer";
+import NewTaskForm from "./components/NewTaskForm";
+import TaskList from "./components/TaskList";
+import Footer from "./components/Footer";
 
 export default function App() {
+
+    const data = [
+        { className: 'editing', created: new Date(), description: 'Editing task'},
+        { className: 'completed', created: new Date(), description: 'Completed task'},
+        {created: new Date(), description: 'Active task'},
+    ];
+
     return (
         <section className="todoapp">
             <NewTaskForm />
             <section className="main">
-                <TaskList />
+                <TaskList data = {data}/>
                 <Footer />
             </section>
         </section>

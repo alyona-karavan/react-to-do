@@ -1,20 +1,22 @@
 import './Task.css'
 
-export default function Task (props) {
+export default function Task ({className, created, description}) {
+
+  const taskTime = created;
+  const now = new Date();
+
     return (
-        <li className={props.className}> 
-        {/* className="completed" и без класса */}
+        <li className={className}> 
             <div className="view">
               <input className="toggle" type="checkbox" />
               <label>
-                <span className="description">Editing task</span>
-                <span className="created">created 5 minutes ago</span>
+                <span className="description">{description}</span>
+                <span className="created">created {(now - taskTime).toString()} ago</span>
               </label>
               <button className="icon icon-edit"></button>
               <button className="icon icon-destroy"></button>
             </div>
             <input type="text" className="edit" value="Editing task" />
-            {/* инпут только у editing */}
         </li>                                    
     )
 }

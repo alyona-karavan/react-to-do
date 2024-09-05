@@ -1,11 +1,17 @@
-import Task from "../Task/Task";
+import Task from "../Task";
 
 import "./TaskList.css";
 
-export default function TaskList () {
+export default function TaskList ({data}) {
+    const elements = data.map((item) => {
+
+      return(
+      <Task {...item}/>)
+    })
+
     return (
         <ul className="todo-list">
-            <Task className = ''/>
+            {elements}
         </ul>                                     
     )
 }

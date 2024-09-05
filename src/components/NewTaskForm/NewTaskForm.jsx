@@ -1,6 +1,6 @@
 import "./NewTaskForm.css"; 
 
-export default function NewTaskForm ({props}) {
+export default function NewTaskForm () {
     return (
     <header className="header">                                       
         <h1>todos</h1>
