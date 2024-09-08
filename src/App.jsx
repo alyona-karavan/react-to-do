@@ -6,7 +6,7 @@ import { Component } from "react";
 
 export default class App extends Component {
 
-
+    const k =length;
     state = {
         data : [],
         filter: 'all',
