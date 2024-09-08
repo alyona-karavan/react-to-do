@@ -2,11 +2,11 @@ import Task from "../Task";
 
 import "./TaskList.css";
 
-export default function TaskList ({data, onDelete}) {
+export default function TaskList ({data, onDelete, onDone, onEdit, addItem}) {
     const elements = data.map((item) => {
 
       return(
-      <Task {...item} onDelete = {() => { onDelete(item.key)}}/>)
+      <Task {...item} onDelete = {() => { onDelete(item.key)}} onDone = { () => { onDone(item.key)}} onEdit = { () => { onEdit(item.key)}} addItem = { () => addItem(item.key)}/>)
     })
 
     return (
@@ -15,39 +15,3 @@ export default function TaskList ({data, onDelete}) {
         </ul>                                     
     )
 }
-
-/* 3 состояния компонента таск
-    <li class="completed">
-            <div class="view">
-              <input class="toggle" type="checkbox" />
-              <label>
-                <span class="description">Completed task</span>
-                <span class="created">created 17 seconds ago</span>
-              </label>
-              <button class="icon icon-edit"></button>
-              <button class="icon icon-destroy"></button>
-            </div>
-          </li>
-          <li class="editing">
-            <div class="view">
-              <input class="toggle" type="checkbox" />
-              <label>
-                <span class="description">Editing task</span>
-                <span class="created">created 5 minutes ago</span>
-              </label>
-              <button class="icon icon-edit"></button>
-              <button class="icon icon-destroy"></button>
-            </div>
-            <input type="text" class="edit" value="Editing task" />
-          </li>
-          <li>
-            <div class="view">
-              <input class="toggle" type="checkbox" />
-              <label>
-                <span class="description">Active task</span>
-                <span class="created">created 5 minutes ago</span>
-              </label>
-              <button class="icon icon-edit"></button>
-              <button class="icon icon-destroy"></button>
-            </div>
-          </li> */
