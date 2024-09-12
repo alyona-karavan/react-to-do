@@ -6,7 +6,6 @@ import { Component } from "react";
 
 export default class App extends Component {
 
-    const k =length;
     state = {
         data : [],
         filter: 'all',
@@ -16,12 +15,23 @@ export default class App extends Component {
         return {
             name,
             key: this.state.data.length + 1,
-            edit: false,
             done: false,
+            edit: false,
             date: new Date(),
         }
     }
 
+    addItem = (text) => {
+        const newItem = this.createItem(text);
+
+        this.setState( ({data}) => {
+            const newArr = [...data, newItem];
+
+            return {
+                data: newArr
+            };
+        });
+    };
     
 
     deleteItem = (key) => {
@@ -38,48 +48,44 @@ export default class App extends Component {
         })
     }
 
-    addItem = (text) => {
-        const newItem = this.createItem(text);
-
+    onToggleDone = (key) => {
         this.setState( ({data}) => {
-            const newArr = [...data, newItem];
+            const idx = data.findIndex((el) => el.key === key);
+            const oldItem = data[idx];
+            const newItem = {...oldItem, done: !oldItem.done};
+
+            const newArray = [...data.slice(0, idx), 
+                            newItem,
+                            ...data.slice(idx + 1)];
 
             return {
-                data: newArr
+                data: newArray
             };
         });
     };
 
-    toggleProperty(arr, key, propName) {
-        const idx = arr.findIndex((el) => el.key === key);
-            const oldItem = arr[idx];
-            const newItem = { ...oldItem, [propName]: !oldItem[propName]};
-
-            return [ ...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)];
-    }
-    
-    onDone = (key) => {
+    onToggleEdit = (key) => {
         this.setState( ({data}) => {
+            const idx = data.findIndex((el) => el.key === key);
+            const oldItem = data[idx];
+            const newItem = {...oldItem, edit: !oldItem.edit};
+
+            const newArray = [...data.slice(0, idx), 
+                            newItem,
+                            ...data.slice(idx + 1)];
+
             return {
-                data: this.toggleProperty(data, key, 'done')
+                data: newArray
             };
         });
-    };
-
-    onEdit = (key) => {
-        this.setState( ({data}) => {
-            return {
-                data: this.toggleProperty(data, key, 'edit')
-            };
-        });
-    };
+      }
 
     filteredItems = () =>  {
         const { data, filter } = this.state;
-        return data.filter(({ done }) => {
+        return data.filter(({done}) => {
           const all = filter === 'all';
-          const completed = filter === 'done';
-          return all ? true : completed ? done === true : done === false;
+          const completed = filter === 'completed';
+          return all ? true : completed ? done === true : done === false ;
         });
       }
 
@@ -96,20 +102,16 @@ export default class App extends Component {
         const doneCount = this.state.data.filter( (el) => el.done).length;
         const todoCount = this.state.data.length - doneCount;
 
-        // const doneItems = this.state.data.filter( (el) => el.done);
-        // const todoItems = this.state.data.filter( (el) => !el.done);
-        // const allItems = this.state.data;
-
         return (
             <section className="todoapp">
                 <NewTaskForm 
                 addItem ={this.addItem}/>
                 <section className="main">
                     <TaskList 
-                    data = {this.state.data} 
+                    data = {this.filteredItems()} 
                     onDelete = {this.deleteItem} 
-                    onDone = {this.onDone} 
-                    onEdit ={this.onEdit} />
+                    onDone = {this.onToggleDone} 
+                    onEdit ={this.onToggleEdit} />
                     <Footer 
                     todo = {todoCount} 
                     changeFilter={this.changeFilter}

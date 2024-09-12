@@ -1,8 +1,10 @@
 import Task from "../Task";
-
+import { Component } from "react";
 import "./TaskList.css";
 
-export default function TaskList ({data, onDelete, onDone, onEdit, addItem}) {
+export default class TaskList extends Component{ 
+    render () {
+    const {data, onDelete, onDone, onEdit, addItem} = this.props;
     const elements = data.map((item) => {
 
       return(
@@ -14,4 +16,4 @@ export default function TaskList ({data, onDelete, onDone, onEdit, addItem}) {
             {elements}
         </ul>                                     
     )
-}
+}}
