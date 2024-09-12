@@ -1,6 +1,7 @@
 import './Task.css'
-
 import { Component } from 'react';
+import { formatDistanceToNow } from "date-fns";
+import PropTypes from 'prop-types';
 
 export default class Task extends Component {
   
@@ -16,19 +17,11 @@ export default class Task extends Component {
 
   onSubmit =(e) => {
     e.preventDefault();
-    const {
-      onEdit,
-      data: { key },
-    } = this.props;
-    onEdit(key, this.state.label);
-    
+    this.props.onEdit(this.props.key, this.state.label);
   }
 
   render () {
-    const { created, name, onDelete, onDone, onEdit,  done, edit, key} = this.props;
-
-    const taskTime = created;
-    const now = new Date();
+    const { date, name, onDelete, onDone, onEdit,  done, edit, key} = this.props;
 
     let checked;
     let classNames = '';
@@ -48,15 +41,39 @@ export default class Task extends Component {
                   <span 
                   className="description" 
                   >{name}</span>
-                  <span className="created">created {(now - taskTime).toString()} ago</span>
+                  <span className="created"> created {formatDistanceToNow(date, {includeSeconds: true, addSuffix: true})} </span>
                 </label>
                 <button className="icon icon-edit" onClick ={onEdit}></button>
                 <button className="icon icon-destroy" onClick ={onDelete}></button>
               </div>
+              <form  onSubmit = {this.onSubmit}>
               <input type="text" className="edit" 
                 onChange = {this.onChange}
                 value={this.state.label} />
+              </form>
           </li>                                    
       )
   }
 }
+
+Task.defaultProps = {
+  date: new Date(),
+  name: 'No text',
+  onDelete: () => {},
+  onDone: () => {},
+  onEdit: () => {},
+  done: false,
+  edit: false,
+  key: 123,
+};
+
+Task.propTypes = {
+  date: PropTypes.object,
+  name: PropTypes.string,
+  onDelete: PropTypes.func,
+  onDone: PropTypes.func,
+  onEdit: PropTypes.func,
+  done: PropTypes.bool,
+  edit: PropTypes.bool,
+  key: PropTypes.number,
+};
