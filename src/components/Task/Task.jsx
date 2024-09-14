@@ -15,7 +15,7 @@ export default class Task extends Component {
     })
   }
 
-  onSubmit =(e) => {
+  onSubmit = (e) => {
     e.preventDefault();
     this.props.onEdit(this.props.key, this.state.label);
   }
@@ -34,22 +34,22 @@ export default class Task extends Component {
     }
 
       return (
-          <li key = {key} className={classNames}> 
-              <div className="view" >
+          <li key = {key} className = {classNames}> 
+              <div className = "view" >
                 <input className="toggle" type="checkbox"  checked = {checked} onClick = {onDone} />
                 <label onClick = {onDone}>
                   <span 
                   className="description" 
-                  >{name}</span>
+                  >{this.state.label}</span>
                   <span className="created"> created {formatDistanceToNow(date, {includeSeconds: true, addSuffix: true})} </span>
                 </label>
-                <button className="icon icon-edit" onClick ={onEdit}></button>
-                <button className="icon icon-destroy" onClick ={onDelete}></button>
+                <button className="icon icon-edit" onClick = {() => onEdit(key, this.state.label)}></button>
+                <button className="icon icon-destroy" onClick = {onDelete}></button>
               </div>
               <form  onSubmit = {this.onSubmit}>
               <input type="text" className="edit" 
                 onChange = {this.onChange}
-                value={this.state.label} />
+                value = {this.state.label} />
               </form>
           </li>                                    
       )

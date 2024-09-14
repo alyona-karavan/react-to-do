@@ -64,11 +64,13 @@ export default class App extends Component {
         });
     };
 
-    onToggleEdit = (key, newText) => {
+    onToggleEdit = (key, newText ) => {
         this.setState( ({data}) => {
             const idx = data.findIndex((el) => el.key === key);
             const oldItem = data[idx];
-            const newItem = {...oldItem, name: newText, edit: !oldItem.edit};
+            const newItem = {...oldItem, 
+                                name: newText, 
+                                edit: !oldItem.edit};
 
             const newArray = [...data.slice(0, idx), 
                             newItem,

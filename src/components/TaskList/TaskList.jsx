@@ -9,7 +9,11 @@ export default class TaskList extends Component{
     const elements = data.map((item) => {
 
       return(
-      <Task {...item} key = {item.key} onDelete = {() => { onDelete(item.key)}} onDone = { () => { onDone(item.key)}} onEdit = { () => { onEdit(item.key)}} addItem = { () => addItem(item.key)}/>)
+      <Task {...item} key = {item.key} 
+      onDelete = {() => { onDelete(item.key)}} 
+      onDone = { () => { onDone(item.key)}} 
+      onEdit = { () => { onEdit(item.key)}} 
+      addItem = { () => addItem(item.key)}/>)
     })
 
     return (
