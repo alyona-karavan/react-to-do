@@ -1,7 +1,8 @@
-import Task from '../Task'
-import { Component } from 'react'
-import './TaskList.css'
 import PropTypes from 'prop-types'
+import { Component } from 'react'
+
+import Task from '../Task'
+import './TaskList.css'
 
 export default class TaskList extends Component {
   render() {
@@ -10,17 +11,18 @@ export default class TaskList extends Component {
       return (
         <Task
           {...item}
-          key={item.key}
+          key={item.id}
+          id={item.id}
           onDelete={() => {
-            onDelete(item.key)
+            onDelete(item.id)
           }}
           onDone={() => {
-            onDone(item.key)
+            onDone(item.id)
           }}
           onEdit={() => {
-            onEdit(item.key)
+            onEdit(item.id)
           }}
-          addItem={() => addItem(item.key)}
+          addItem={() => addItem(item.id)}
         />
       )
     })

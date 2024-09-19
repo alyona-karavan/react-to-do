@@ -16,11 +16,11 @@ export default class Task extends Component {
 
   onSubmit = (e) => {
     e.preventDefault()
-    this.props.onEdit(this.props.key, this.state.label)
+    this.props.onEdit(this.props.id, this.state.label)
   }
 
   render() {
-    const { date, name, onDelete, onDone, onEdit, done, edit, key } = this.props
+    const { date, onDelete, onDone, onEdit, done, edit, id } = this.props
 
     let checked
     let classNames = ''
@@ -33,7 +33,7 @@ export default class Task extends Component {
     }
 
     return (
-      <li key={key} className={classNames}>
+      <li className={classNames}>
         <div className="view">
           <input className="toggle" type="checkbox" checked={checked} onClick={onDone} />
           <label onClick={onDone}>
@@ -43,7 +43,7 @@ export default class Task extends Component {
               created {formatDistanceToNow(date, { includeSeconds: true, addSuffix: true })}{' '}
             </span>
           </label>
-          <button className="icon icon-edit" onClick={() => onEdit(key, this.state.label)}></button>
+          <button className="icon icon-edit" onClick={() => onEdit(id, this.state.label)}></button>
           <button className="icon icon-destroy" onClick={onDelete}></button>
         </div>
         <form onSubmit={this.onSubmit}>
@@ -62,7 +62,7 @@ Task.defaultProps = {
   onEdit: () => {},
   done: false,
   edit: false,
-  key: 123,
+  id: 123,
 }
 
 Task.propTypes = {
@@ -73,5 +73,5 @@ Task.propTypes = {
   onEdit: PropTypes.func,
   done: PropTypes.bool,
   edit: PropTypes.bool,
-  key: PropTypes.number,
+  id: PropTypes.number,
 }

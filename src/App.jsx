@@ -13,7 +13,7 @@ export default class App extends Component {
   createItem(name) {
     return {
       name,
-      key: this.state.data.length + 1,
+      id: this.state.data.length + 1,
       done: false,
       edit: false,
       date: new Date(),
@@ -32,9 +32,9 @@ export default class App extends Component {
     })
   }
 
-  deleteItem = (key) => {
+  deleteItem = (id) => {
     this.setState(({ data }) => {
-      const idx = data.findIndex((el) => el.key === key)
+      const idx = data.findIndex((el) => el.id === id)
 
       const before = data.slice(0, idx)
       const after = data.slice(idx + 1)
@@ -46,9 +46,9 @@ export default class App extends Component {
     })
   }
 
-  onToggleDone = (key) => {
+  onToggleDone = (id) => {
     this.setState(({ data }) => {
-      const idx = data.findIndex((el) => el.key === key)
+      const idx = data.findIndex((el) => el.id === id)
       const oldItem = data[idx]
       const newItem = { ...oldItem, done: !oldItem.done }
 
@@ -60,9 +60,9 @@ export default class App extends Component {
     })
   }
 
-  onToggleEdit = (key, newText) => {
+  onToggleEdit = (id, newText) => {
     this.setState(({ data }) => {
-      const idx = data.findIndex((el) => el.key === key)
+      const idx = data.findIndex((el) => el.id === id)
       const oldItem = data[idx]
       const newItem = { ...oldItem, name: newText, edit: !oldItem.edit }
 
