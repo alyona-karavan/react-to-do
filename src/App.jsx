@@ -1,122 +1,118 @@
-import NewTaskForm from "./components/NewTaskForm";
-import TaskList from "./components/TaskList";
-import Footer from "./components/Footer";
+import { Component } from 'react'
 
-import { Component } from "react";
+import NewTaskForm from './components/NewTaskForm'
+import TaskList from './components/TaskList'
+import Footer from './components/Footer'
 
 export default class App extends Component {
+  state = {
+    data: [],
+    filter: 'all',
+  }
 
-
-    state = {
-        data : [],
-        filter: 'all',
-    };
-
-    createItem (name) {
-        return {
-            name,
-            key: this.state.data.length + 1,
-            edit: false,
-            done: false,
-            date: new Date(),
-        }
+  createItem(name) {
+    return {
+      name,
+      id: this.state.data.length + 1,
+      done: false,
+      edit: false,
+      date: new Date(),
     }
+  }
 
-    
+  addItem = (text) => {
+    const newItem = this.createItem(text)
 
-    deleteItem = (key) => {
-        this.setState ( ({data}) => {
-            const idx = data.findIndex((el) => el.key === key);
+    this.setState(({ data }) => {
+      const newArr = [...data, newItem]
 
-            const before = data.slice(0, idx);
-            const after = data.slice(idx + 1);
-            const newArray = [...before, ...after];
-
-            return {
-                data: newArray
-            }
-        })
-    }
-
-    addItem = (text) => {
-        const newItem = this.createItem(text);
-
-        this.setState( ({data}) => {
-            const newArr = [...data, newItem];
-
-            return {
-                data: newArr
-            };
-        });
-    };
-
-    toggleProperty(arr, key, propName) {
-        const idx = arr.findIndex((el) => el.key === key);
-            const oldItem = arr[idx];
-            const newItem = { ...oldItem, [propName]: !oldItem[propName]};
-
-            return [ ...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)];
-    }
-    
-    onDone = (key) => {
-        this.setState( ({data}) => {
-            return {
-                data: this.toggleProperty(data, key, 'done')
-            };
-        });
-    };
-
-    onEdit = (key) => {
-        this.setState( ({data}) => {
-            return {
-                data: this.toggleProperty(data, key, 'edit')
-            };
-        });
-    };
-
-    filteredItems = () =>  {
-        const { data, filter } = this.state;
-        return data.filter(({ done }) => {
-          const all = filter === 'all';
-          const completed = filter === 'done';
-          return all ? true : completed ? done === true : done === false;
-        });
+      return {
+        data: newArr,
       }
+    })
+  }
 
-      clearCompleted = () => {
-        this.setState(({ data }) => ({ data: data.filter((element) => !element.done) }));
+  deleteItem = (id) => {
+    this.setState(({ data }) => {
+      const idx = data.findIndex((el) => el.id === id)
+
+      const before = data.slice(0, idx)
+      const after = data.slice(idx + 1)
+      const newArray = [...before, ...after]
+
+      return {
+        data: newArray,
       }
-    
-      changeFilter = (el) => {
-        this.setState({ filter: el });
+    })
+  }
+
+  onToggleDone = (id) => {
+    this.setState(({ data }) => {
+      const idx = data.findIndex((el) => el.id === id)
+      const oldItem = data[idx]
+      const newItem = { ...oldItem, done: !oldItem.done }
+
+      const newArray = [...data.slice(0, idx), newItem, ...data.slice(idx + 1)]
+
+      return {
+        data: newArray,
       }
+    })
+  }
 
-    
-    render () {
-        const doneCount = this.state.data.filter( (el) => el.done).length;
-        const todoCount = this.state.data.length - doneCount;
+  onToggleEdit = (id, newText) => {
+    this.setState(({ data }) => {
+      const idx = data.findIndex((el) => el.id === id)
+      const oldItem = data[idx]
+      const newItem = { ...oldItem, name: newText, edit: !oldItem.edit }
 
-        // const doneItems = this.state.data.filter( (el) => el.done);
-        // const todoItems = this.state.data.filter( (el) => !el.done);
-        // const allItems = this.state.data;
+      const newArray = [...data.slice(0, idx), newItem, ...data.slice(idx + 1)]
 
-        return (
-            <section className="todoapp">
-                <NewTaskForm 
-                addItem ={this.addItem}/>
-                <section className="main">
-                    <TaskList 
-                    data = {this.state.data} 
-                    onDelete = {this.deleteItem} 
-                    onDone = {this.onDone} 
-                    onEdit ={this.onEdit} />
-                    <Footer 
-                    todo = {todoCount} 
-                    changeFilter={this.changeFilter}
-                    clearCompleted={this.clearCompleted}
-                    filter={this.state.filter}/>
-                </section>
-            </section>
-        )
-    }
+      return {
+        data: newArray,
+      }
+    })
+  }
+
+  filteredItems = () => {
+    const { data, filter } = this.state
+    return data.filter(({ done }) => {
+      const all = filter === 'all'
+      const completed = filter === 'completed'
+      return all ? true : completed ? done === true : done === false
+    })
+  }
+
+  clearCompleted = () => {
+    this.setState(({ data }) => ({ data: data.filter((element) => !element.done) }))
+  }
+
+  changeFilter = (el) => {
+    this.setState({ filter: el })
+  }
+
+  render() {
+    const doneCount = this.state.data.filter((el) => el.done).length
+    const todoCount = this.state.data.length - doneCount
+
+    return (
+      <section className="todoapp">
+        <NewTaskForm addItem={this.addItem} />
+        <section className="main">
+          <TaskList
+            data={this.filteredItems()}
+            onDelete={this.deleteItem}
+            onDone={this.onToggleDone}
+            onEdit={this.onToggleEdit}
+          />
+          <Footer
+            todo={todoCount}
+            changeFilter={this.changeFilter}
+            clearCompleted={this.clearCompleted}
+            filter={this.state.filter}
+          />
+        </section>
+      </section>
+    )
+  }
 }
