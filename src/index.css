@@ -1,3 +1,4 @@
+/* eslint-disable */
 html,
 body {
   margin: 0;
@@ -145,3 +146,4 @@ body {
     height: 40px;
   }
 }
+/* eslint-enable */
