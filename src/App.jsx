@@ -15,7 +15,6 @@ export default class App extends Component {
       name,
       id: this.state.data.length + 1,
       done: false,
-      edit: false,
       date: new Date(),
     }
   }
@@ -64,7 +63,7 @@ export default class App extends Component {
     this.setState(({ data }) => {
       const idx = data.findIndex((el) => el.id === id)
       const oldItem = data[idx]
-      const newItem = { ...oldItem, name: newText, edit: !oldItem.edit }
+      const newItem = { ...oldItem, name: newText }
 
       const newArray = [...data.slice(0, idx), newItem, ...data.slice(idx + 1)]
 
