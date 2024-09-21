@@ -19,9 +19,7 @@ export default class TaskList extends Component {
           onDone={() => {
             onDone(item.id)
           }}
-          onEdit={() => {
-            onEdit(item.id)
-          }}
+          onEdit={onEdit}
           addItem={() => addItem(item.id)}
         />
       )
