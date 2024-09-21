@@ -22,11 +22,9 @@ export default class Task extends Component {
   render() {
     const { date, onDelete, onDone, onEdit, done, edit, id } = this.props
 
-    let checked
     let classNames = ''
     if (done) {
       classNames = 'completed'
-      checked = true
     }
     if (edit) {
       classNames = 'editing'
@@ -35,7 +33,7 @@ export default class Task extends Component {
     return (
       <li className={classNames}>
         <div className="view">
-          <input className="toggle" type="checkbox" checked={checked} onClick={onDone} />
+          <input className="toggle" type="checkbox" checked={done} onClick={onDone} onChange={() => {}} />
           <label onClick={onDone}>
             <span className="description">{this.state.label}</span>
             <span className="created">
