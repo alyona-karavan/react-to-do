@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 export default class Task extends Component {
   state = {
     label: this.props.name,
+    editing: false,
   }
 
   onChange = (e) => {
@@ -17,16 +18,19 @@ export default class Task extends Component {
   onSubmit = (e) => {
     e.preventDefault()
     this.props.onEdit(this.props.id, this.state.label)
+    this.setState({
+      editing: false,
+    })
   }
 
   render() {
-    const { date, onDelete, onDone, onEdit, done, edit, id } = this.props
+    const { date, onDelete, onDone, done } = this.props
 
     let classNames = ''
     if (done) {
       classNames = 'completed'
     }
-    if (edit) {
+    if (this.state.editing) {
       classNames = 'editing'
     }
 
@@ -41,7 +45,14 @@ export default class Task extends Component {
               created {formatDistanceToNow(date, { includeSeconds: true, addSuffix: true })}{' '}
             </span>
           </label>
-          <button className="icon icon-edit" onClick={() => onEdit(id, this.state.label)}></button>
+          <button
+            className="icon icon-edit"
+            onClick={() => {
+              this.setState({
+                editing: true,
+              })
+            }}
+          ></button>
           <button className="icon icon-destroy" onClick={onDelete}></button>
         </div>
         <form onSubmit={this.onSubmit}>
@@ -59,7 +70,6 @@ Task.defaultProps = {
   onDone: () => {},
   onEdit: () => {},
   done: false,
-  edit: false,
   id: 123,
 }
 
@@ -70,6 +80,5 @@ Task.propTypes = {
   onDone: PropTypes.func,
   onEdit: PropTypes.func,
   done: PropTypes.bool,
-  edit: PropTypes.bool,
   id: PropTypes.number,
 }
