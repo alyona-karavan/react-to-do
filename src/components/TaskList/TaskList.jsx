@@ -6,7 +6,7 @@ import './TaskList.css'
 
 export default class TaskList extends Component {
   render() {
-    const { data, onDelete, onDone, onEdit, addItem } = this.props
+    const { data, onDelete, onDone, onEdit, addItem, timers } = this.props
     const elements = data.map((item) => {
       return (
         <Task
@@ -21,6 +21,8 @@ export default class TaskList extends Component {
           }}
           onEdit={onEdit}
           addItem={() => addItem(item.id)}
+          timer={timers[item.id]}
+          onTimer={(timer) => this.props.onTimer(timer, item.id)}
         />
       )
     })

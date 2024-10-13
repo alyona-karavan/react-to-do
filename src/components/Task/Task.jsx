@@ -3,6 +3,8 @@ import { Component } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import PropTypes from 'prop-types'
 
+import Timer from '../Timer'
+
 export default class Task extends Component {
   state = {
     label: this.props.name,
@@ -24,7 +26,7 @@ export default class Task extends Component {
   }
 
   render() {
-    const { date, onDelete, onDone, done } = this.props
+    const { date, onDelete, onDone, done, id, timer, onTimer } = this.props
 
     let classNames = ''
     if (done) {
@@ -39,7 +41,13 @@ export default class Task extends Component {
         <div className="view">
           <input className="toggle" type="checkbox" checked={done} onClick={onDone} onChange={() => {}} />
           <label onClick={onDone}>
-            <span className="description">{this.state.label}</span>
+            <span className="title">{this.state.label}</span>
+            <Timer
+              timer={timer}
+              onTimerUpdate={(timer) => {
+                onTimer(timer, id)
+              }}
+            />
             <span className="created">
               {' '}
               created {formatDistanceToNow(date, { includeSeconds: true, addSuffix: true })}{' '}

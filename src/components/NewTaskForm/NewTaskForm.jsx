@@ -21,18 +21,20 @@ export default class NewTaskForm extends Component {
     })
   }
 
+  handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      this.onSubmit(event)
+    }
+  }
+
   render() {
     return (
-      <form className="header" onSubmit={this.onSubmit}>
+      <form className="new-todo-form" onSubmit={this.onSubmit} onKeyDown={this.handleKeyPress}>
         <h1>todos</h1>
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          autoFocus
-          type="text"
-          onChange={this.onChange}
-          value={this.state.label}
-        />
+        <input className="new-todo" placeholder="Task" autoFocus onChange={this.onChange} value={this.state.label} />
+        <input className="new-todo-form__timer" placeholder="Min" autoFocus />
+        <input className="new-todo-form__timer" placeholder="Sec" autoFocus />
       </form>
     )
   }

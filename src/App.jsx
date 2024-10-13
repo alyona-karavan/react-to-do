@@ -8,6 +8,7 @@ export default class App extends Component {
   state = {
     data: [],
     filter: 'all',
+    timers: {},
   }
 
   createItem(name) {
@@ -16,6 +17,7 @@ export default class App extends Component {
       id: this.state.data.length + 1,
       done: false,
       date: new Date(),
+      timer: {},
     }
   }
 
@@ -90,6 +92,10 @@ export default class App extends Component {
     this.setState({ filter: el })
   }
 
+  onTimer = (timer, id) => {
+    this.setState(({ timers }) => ({ timers: { ...timers, [id]: timer } }))
+  }
+
   render() {
     const doneCount = this.state.data.filter((el) => el.done).length
     const todoCount = this.state.data.length - doneCount
@@ -103,6 +109,8 @@ export default class App extends Component {
             onDelete={this.deleteItem}
             onDone={this.onToggleDone}
             onEdit={this.onToggleEdit}
+            onTimer={this.onTimer}
+            timers={this.state.timers}
           />
           <Footer
             todo={todoCount}
