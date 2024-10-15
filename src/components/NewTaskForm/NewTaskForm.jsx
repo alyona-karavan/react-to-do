@@ -72,7 +72,6 @@ export default class NewTaskForm extends Component {
         />
         <input
           required
-          type="number"
           className="new-todo-form__timer"
           placeholder="Min"
           value={this.state.minutes}
@@ -80,7 +79,6 @@ export default class NewTaskForm extends Component {
         />
         <input
           required
-          type="number"
           className="new-todo-form__timer"
           placeholder="Sec"
           value={this.state.seconds}
