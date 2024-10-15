@@ -4,9 +4,9 @@ export default class Timer extends Component {
   state = {
     minutes: this.props.timer.minutes,
     seconds: this.props.timer.seconds,
-    running: false,
-    paused: false,
-    startTime: 0,
+    running: this.props.timer.running,
+    paused: this.props.timer.paused,
+    startTime: this.props.timer.startTime,
   }
 
   componentDidMount() {
@@ -18,18 +18,27 @@ export default class Timer extends Component {
       paused: timer.paused,
       startTime: timer.startTime,
     })
-    console.log(timer)
     console.log(this.state)
   }
 
   componentWillUnmount() {
-    this.setState({
-      running: false,
-      paused: true,
-    })
+    this.stopTimer()
+    this.updateParent()
+  }
+
+  stopTimer = () => {
     if (this.intervalId) {
       clearInterval(this.intervalId)
     }
+  }
+
+  updateParent = () => {
+    const finalState = {
+      ...this.state,
+      running: false,
+      paused: true,
+    }
+    this.props.onTimerUpdate(finalState)
   }
 
   pauseTimer = (event) => {
@@ -59,7 +68,6 @@ export default class Timer extends Component {
         const newMinutes = Math.floor(newSeconds / 60)
         const newSecondsRemainder = newSeconds % 60
         this.setState({ minutes: newMinutes, seconds: newSecondsRemainder })
-        this.props.onTimerUpdate(this.state)
       } else {
         this.setState({ running: false })
         clearInterval(this.intervalId)

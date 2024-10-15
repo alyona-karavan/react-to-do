@@ -16,15 +16,25 @@ export default class NewTaskForm extends Component {
   }
 
   onChangeMin = (e) => {
-    this.setState({
-      minutes: e.target.value,
-    })
+    const value = e.target.value
+    if (value === '' || (parseInt(value) >= 0 && parseInt(value) <= 59)) {
+      this.setState({
+        minutes: value,
+      })
+    } else {
+      alert('Пожалуйста, введите корректные значения для минут (от 0 до 59)')
+    }
   }
 
   onChangeSec = (e) => {
-    this.setState({
-      seconds: e.target.value,
-    })
+    const value = e.target.value
+    if (value === '' || (parseInt(value) >= 0 && parseInt(value) <= 59)) {
+      this.setState({
+        seconds: value,
+      })
+    } else {
+      alert('Пожалуйста, введите корректные значения секунд (от 0 до 59)')
+    }
   }
 
   onSubmit = (e) => {
