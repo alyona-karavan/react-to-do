@@ -18,7 +18,6 @@ export default class Timer extends Component {
       paused: timer.paused,
       startTime: timer.startTime,
     })
-    console.log(this.state)
   }
 
   componentWillUnmount() {
