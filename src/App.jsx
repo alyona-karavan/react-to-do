@@ -8,21 +8,26 @@ export default class App extends Component {
   state = {
     data: [],
     filter: 'all',
-    timers: {},
   }
 
-  createItem(name) {
+  createItem(name, minutes, seconds) {
     return {
       name,
       id: this.state.data.length + 1,
       done: false,
       date: new Date(),
-      timer: {},
+      timer: {
+        minutes: Number(minutes),
+        seconds: Number(seconds),
+        running: false,
+        paused: false,
+        startTime: 0,
+      },
     }
   }
 
-  addItem = (text) => {
-    const newItem = this.createItem(text)
+  addItem = (text, minutes, seconds) => {
+    const newItem = this.createItem(text, minutes, seconds)
 
     this.setState(({ data }) => {
       const newArr = [...data, newItem]
@@ -93,7 +98,9 @@ export default class App extends Component {
   }
 
   onTimer = (timer, id) => {
-    this.setState(({ timers }) => ({ timers: { ...timers, [id]: timer } }))
+    const updateTask = (task) => (task.id === id ? { ...task, timer } : task)
+    const newData = this.state.data.map(updateTask)
+    this.setState({ data: newData })
   }
 
   render() {
@@ -110,7 +117,6 @@ export default class App extends Component {
             onDone={this.onToggleDone}
             onEdit={this.onToggleEdit}
             onTimer={this.onTimer}
-            timers={this.state.timers}
           />
           <Footer
             todo={todoCount}

@@ -1,29 +1,32 @@
 import { Component } from 'react'
 
-export default class Taimer extends Component {
+export default class Timer extends Component {
   state = {
-    minutes: 0,
-    seconds: 0,
+    minutes: this.props.timer.minutes,
+    seconds: this.props.timer.seconds,
     running: false,
     paused: false,
     startTime: 0,
   }
+
   componentDidMount() {
     const { timer } = this.props
-
-    if (timer) {
-      this.setState({
-        minutes: timer.minutes,
-        seconds: timer.seconds,
-        running: timer.running,
-        paused: timer.paused,
-        startTime: timer.startTime,
-      })
-    }
+    this.setState({
+      minutes: timer.minutes,
+      seconds: timer.seconds,
+      running: timer.running,
+      paused: timer.paused,
+      startTime: timer.startTime,
+    })
+    console.log(timer)
+    console.log(this.state)
   }
 
   componentWillUnmount() {
-    this.setState({ paused: true })
+    this.setState({
+      running: false,
+      paused: true,
+    })
     if (this.intervalId) {
       clearInterval(this.intervalId)
     }
@@ -50,10 +53,17 @@ export default class Taimer extends Component {
 
   updateTimer = () => {
     if (this.state.running) {
-      const currentTime = new Date()
-      const elapsed = currentTime - this.state.startTime
-      this.setState({ minutes: Math.floor(elapsed / 60000), seconds: Math.floor((elapsed % 60000) / 1000) })
-      this.props.onTimerUpdate(this.state)
+      const totalSeconds = this.state.minutes * 60 + this.state.seconds
+      if (totalSeconds > 0) {
+        const newSeconds = totalSeconds - 1
+        const newMinutes = Math.floor(newSeconds / 60)
+        const newSecondsRemainder = newSeconds % 60
+        this.setState({ minutes: newMinutes, seconds: newSecondsRemainder })
+        this.props.onTimerUpdate(this.state)
+      } else {
+        this.setState({ running: false })
+        clearInterval(this.intervalId)
+      }
     }
   }
 
