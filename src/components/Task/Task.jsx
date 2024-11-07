@@ -1,84 +1,69 @@
 import './Task.css'
-import { Component } from 'react'
+import { useCallback, useState } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import PropTypes from 'prop-types'
 
 import Timer from '../Timer'
 
-export default class Task extends Component {
-  state = {
-    label: this.props.name,
-    editing: false,
+const Task = ({
+  date = new Date(),
+  onDelete = () => {},
+  onDone = () => {},
+  done = false,
+  id = Date.now(),
+  timer,
+  onTimer = () => {},
+  name = 'No text',
+  onEdit = () => {},
+}) => {
+  const [label, setLabel] = useState(name)
+  const [edit, setEdit] = useState(false)
+
+  const onChange = (e) => {
+    setLabel(e.target.value)
   }
 
-  onChange = (e) => {
-    this.setState({
-      label: e.target.value,
-    })
-  }
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault()
+      onEdit(id, label)
+      setEdit(false)
+    },
+    [id, label, onEdit]
+  )
 
-  onSubmit = (e) => {
-    e.preventDefault()
-    this.props.onEdit(this.props.id, this.state.label)
-    this.setState({
-      editing: false,
-    })
-  }
+  const classNames = `${done ? 'completed' : ''} ${edit ? 'editing' : ''}`
 
-  render() {
-    const { date, onDelete, onDone, done, id, timer, onTimer } = this.props
-
-    let classNames = ''
-    if (done) {
-      classNames = 'completed'
-    }
-    if (this.state.editing) {
-      classNames = 'editing'
-    }
-
-    return (
-      <li className={classNames}>
-        <div className="view">
-          <input className="toggle" type="checkbox" checked={done} onClick={onDone} onChange={() => {}} />
-          <label onClick={onDone}>
-            <span className="title">{this.state.label}</span>
-            <Timer
-              timer={timer}
-              onTimerUpdate={(timer) => {
-                onTimer(timer, id)
-              }}
-            />
-            <span className="created">
-              {' '}
-              created {formatDistanceToNow(date, { includeSeconds: true, addSuffix: true })}{' '}
-            </span>
-          </label>
-          <button
-            className="icon icon-edit"
-            onClick={() => {
-              this.setState({
-                editing: true,
-              })
+  return (
+    <li className={classNames}>
+      <div className="view">
+        <input className="toggle" type="checkbox" checked={done} onClick={onDone} onChange={() => {}} />
+        <label onClick={onDone}>
+          <span className="title">{label}</span>
+          <Timer
+            timer={timer}
+            onTimerUpdate={(timer) => {
+              onTimer(timer, id)
             }}
-          ></button>
-          <button className="icon icon-destroy" onClick={onDelete}></button>
-        </div>
-        <form onSubmit={this.onSubmit}>
-          <input type="text" className="edit" onChange={this.onChange} value={this.state.label} />
-        </form>
-      </li>
-    )
-  }
-}
-
-Task.defaultProps = {
-  date: new Date(),
-  name: 'No text',
-  onDelete: () => {},
-  onDone: () => {},
-  onEdit: () => {},
-  done: false,
-  id: 123,
+          />
+          <span className="created">
+            {' '}
+            created {formatDistanceToNow(date, { includeSeconds: true, addSuffix: true })}{' '}
+          </span>
+        </label>
+        <button
+          className="icon icon-edit"
+          onClick={() => {
+            setEdit(true)
+          }}
+        ></button>
+        <button className="icon icon-destroy" onClick={onDelete}></button>
+      </div>
+      <form onSubmit={onSubmit}>
+        <input type="text" className="edit" onChange={onChange} value={label} />
+      </form>
+    </li>
+  )
 }
 
 Task.propTypes = {
@@ -90,3 +75,5 @@ Task.propTypes = {
   done: PropTypes.bool,
   id: PropTypes.number,
 }
+
+export default Task

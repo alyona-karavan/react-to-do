@@ -1,98 +1,68 @@
 import './NewTaskForm.css'
-import { Component } from 'react'
+import { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 
-export default class NewTaskForm extends Component {
-  state = {
-    label: '',
-    minutes: '',
-    seconds: '',
-  }
+const NewTaskForm = ({ addItem = () => {} }) => {
+  const [label, setLabel] = useState('')
+  const [minutes, setMinutes] = useState('')
+  const [seconds, setSeconds] = useState('')
 
-  onChangeLabel = (e) => {
-    this.setState({
-      label: e.target.value,
-    })
-  }
+  const onChangeLabel = useCallback((e) => {
+    setLabel(e.target.value)
+  }, [])
 
-  onChangeMin = (e) => {
+  const onChangeMin = useCallback((e) => {
     const value = e.target.value
     if (value === '' || (parseInt(value) >= 0 && parseInt(value) <= 59)) {
-      this.setState({
-        minutes: value,
-      })
+      setMinutes(value)
     } else {
       alert('Пожалуйста, введите корректные значения для минут (от 0 до 59)')
     }
-  }
+  }, [])
 
-  onChangeSec = (e) => {
+  const onChangeSec = useCallback((e) => {
     const value = e.target.value
     if (value === '' || (parseInt(value) >= 0 && parseInt(value) <= 59)) {
-      this.setState({
-        seconds: value,
-      })
+      setSeconds(value)
     } else {
       alert('Пожалуйста, введите корректные значения секунд (от 0 до 59)')
     }
-  }
+  }, [])
 
-  onSubmit = (e) => {
-    e.preventDefault()
-    if (this.state.label && this.state.minutes && this.state.seconds) {
-      this.props.addItem(this.state.label, this.state.minutes, this.state.seconds)
-      this.setState({
-        label: '',
-        minutes: '',
-        seconds: '',
-      })
-    } else {
-      alert('Пожалуйста, заполните все поля')
-    }
-  }
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault()
+      if (label && minutes && seconds) {
+        addItem(label, minutes, seconds)
+        setLabel('')
+        setMinutes('')
+        setSeconds('')
+      } else {
+        alert('Пожалуйста, заполните все поля')
+      }
+    },
+    [addItem, label, minutes, seconds]
+  )
 
-  handleKeyPress = (event) => {
+  const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault()
-      this.onSubmit(event)
+      onSubmit(event)
     }
   }
 
-  render() {
-    return (
-      <form className="new-todo-form" onSubmit={this.onSubmit} onKeyDown={this.handleKeyPress}>
-        <h1>todos</h1>
-        <input
-          required
-          className="new-todo"
-          placeholder="Task"
-          autoFocus
-          onChange={this.onChangeLabel}
-          value={this.state.label}
-        />
-        <input
-          required
-          className="new-todo-form__timer"
-          placeholder="Min"
-          value={this.state.minutes}
-          onChange={this.onChangeMin}
-        />
-        <input
-          required
-          className="new-todo-form__timer"
-          placeholder="Sec"
-          value={this.state.seconds}
-          onChange={this.onChangeSec}
-        />
-      </form>
-    )
-  }
-}
-
-NewTaskForm.defaultProps = {
-  addItem: () => {},
+  return (
+    <form className="new-todo-form" onSubmit={onSubmit} onKeyDown={handleKeyPress}>
+      <h1>todos</h1>
+      <input required className="new-todo" placeholder="Task" autoFocus onChange={onChangeLabel} value={label} />
+      <input required className="new-todo-form__timer" placeholder="Min" value={minutes} onChange={onChangeMin} />
+      <input required className="new-todo-form__timer" placeholder="Sec" value={seconds} onChange={onChangeSec} />
+    </form>
+  )
 }
 
 NewTaskForm.propTypes = {
   addItem: PropTypes.func,
 }
+
+export default NewTaskForm
